@@ -1,49 +1,47 @@
-import Api from '../server/api';
 import React from 'react';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
-import Settings from '../settings';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
-const styles= () => ({
+
+const useStyles = makeStyles({
     root: {
-        width: '230px',
         background: '#242F40',
-        color:'#ffffff',
-        
-    },
-    item:{
-        fontSize:'20px',
-    }
-});  
-class menu extends React.Component {
-    state = {
-        persons: []
-    }
+        color: '#ffffff',
 
-    componentDidMount() {
-        Api.get(`categorias/get`)
-            .then(res => {
-                const persons = res.data;
-                this.setState({ persons });
-            })
-    }
-    render() {
-        const { classes } = this.props;
-        return(  
-                    <MenuList className={classes.root}>
-                        {this.state.persons.map(person => <MenuItem className={classes.item}>
-                             {person.name}
+    },
+    item: {
+        fontSize: '20px',
+        '&:focus': {
+            color: '#fff',
+        },
+        '&:hover': {
+            color: '#fff',
+        }
+
+    },
+});
+function Menu({categories, handleSelectCategory}) {
+    console.log(typeof(categories));
+    console.log(categories);
+    const classes = useStyles();
+    return (
+        <>
+        <div>
+            <MenuList className={classes.root}>
+                {
+                    categories.map((category) => (
+                        <MenuItem className={classes.item}key={category._id} onClick={() => handleSelectCategory(category._id)}>
+                            {category.name}
                         </MenuItem>
-                        )
-                        }
-                        <MenuItem className={classes.item}>Configuração</MenuItem>
-                    </MenuList>
-        )
-    }
+                    ))}
+                    <MenuItem onClick={() => handleSelectCategory('settings')} className={classes.item}>
+                    Configurações
+                        </MenuItem>
+            </MenuList>
+        </div >
+        </>
+    )
 }
-menu.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-export default withStyles(styles)(menu);
+
+export default Menu;
