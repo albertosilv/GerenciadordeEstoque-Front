@@ -8,11 +8,11 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Grid from "@material-ui/core/Grid";
 
 
-const useStyles = makeStyles(theme =>({
+const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(0),
-    margin:theme.spacing(0),
-    border:'none',
+    margin: theme.spacing(0),
+    border: 'none',
     flexGrow: 0,
   },
 
@@ -22,6 +22,7 @@ function App() {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
   const [Option, setOption] = useState(null);
+  const [product,setProduct]=useState(null);
 
   useEffect(() => {
     Api.get('categorias/')
@@ -36,21 +37,24 @@ function App() {
       setOption('settings');
     }
     else {
+      let categoria = categories.find((category) => category._id === id);
+      setProduct(categoria.products);
       setOption(...categories.filter((category) => category._id === id));
     }
 
   }
   function Select() {
     if (Option === 'settings') return <Settings />;
-    else return <Products category={Option} />;
+  else {
+    return <Products category={Option} product={product} />};
   }
   return (
     <div className={classes.grid}>
-        <Grid  spacing={0}container classname={classes.grid}>
-          <Header />
-        </Grid>
-      <Grid container classname={classes.grid}>
-        <Grid item xs={3} classname={classes.grid}>
+      <Grid container spacing={0} className={classes.grid}>
+        <Header />
+      </Grid>
+      <Grid container className={classes.grid}>
+        <Grid item xs={3} className={classes.grid}>
           <Menu handleSelectCategory={handleSelect} categories={categories} />
         </Grid>
         <Grid item xs >
