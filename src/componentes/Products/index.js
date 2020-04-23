@@ -74,7 +74,16 @@ function CategoriesProducts({ category }) {
           {
             title: 'Valor', field: 'value', type: 'currency', currencySetting: { currencyCode: 'BRL' }
           },
-          { title: 'Quantidade', field: 'quantity', type: 'numeric' },
+          { title: 'Quantidade', field: 'quantity', type: 'numeric', defaultSort: 'desc', },
+          {
+            title: 'Imagem do Produto',
+            field: 'image',
+            render: rowData => {
+              if (rowData.image) {
+                return <img src={rowData.image} alt={rowData.name} style={{ width: 80 }} />
+              }
+            }
+          }
         ]}
         data={products}
         title={category.name}
