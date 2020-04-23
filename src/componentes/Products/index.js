@@ -34,12 +34,11 @@ function CategoriesProducts({ category }) {
     })
   }
 
-  function editProduct(product, oldProduct) {
+  function editProduct(newProduct, oldProduct) {
     return new Promise((resolve, reject) => {
-      api.put(`produtos/${oldProduct._id}`, product)
+      api.put(`produtos/${oldProduct._id}`, newProduct)
         .then((response) => {
-          setProducts(products.filter((product) => product._id !== oldProduct._id));
-          setProducts([...products, product]);
+          setProducts([...products.filter((product) => product._id !== oldProduct._id), newProduct]);
           resolve();
         })
         .catch((error) => {
