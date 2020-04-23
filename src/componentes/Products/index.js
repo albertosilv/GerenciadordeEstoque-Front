@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: 'none',
   },
+  root:{
+    diplay:'none'
+  }
 }));
 function CategoriesProducts({ category }) {
   const classes = useStyles();
