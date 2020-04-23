@@ -2,76 +2,87 @@ import MaterialTable from 'material-table'
 import React, { useState, useEffect } from 'react';
 import api from '../server';
 
-function CategoriesProducts({ category, product}) {
-  const [Product, setProduct] = useState(null);
+function CategoriesProducts({ category }) {
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    setProduct(product);
-  },[Product]);
+    if (category !== null) {
+      api.get(`categorias/${category._id}`)
+        .then((response) => setProducts(response.data.products))
+    }
+  }, [category]);
+
   if (category === null) {
     return null;
   }
-  function addProduct(d){
-    const data = new FormData();
-    data.append('name', d.name);
-    data.append('value', d.value);
-    data.append('quantity', d.quantity);
-    console.log(data);
-    api.post('categorias/5e9d114248e63e35c19f0b95/produtos', data)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
+
+  function addProduct(product) {
+    return new Promise((resolve, reject) => {
+      const data = new FormData();
+      data.append('name', product.name);
+      data.append('value', product.value);
+      data.append('quantity', product.quantity);
+
+      api.post(`categorias/${category._id}/produtos`, data)
+        .then((response) => {
+          setProducts([...products, product]);
+          resolve();
+        })
+        .catch((error) => {
+          alert('Não foi possível adicionar o produto!');
+          reject();
+        });
+    })
+  }
+
+  function editProduct(product, oldProduct) {
+    return new Promise((resolve, reject) => {
+      api.put(`produtos/${oldProduct._id}`, product)
+        .then((response) => {
+          setProducts(products.filter((product) => product._id !== oldProduct._id));
+          setProducts([...products, product]);
+          resolve();
+        })
+        .catch((error) => {
+          alert('Erro ao editar produto!')
+          reject();
+        });
+    });
+  }
+
+  function deleteProduct(oldProduct) {
+    return new Promise((resolve, reject) => {
+      api.delete(`/produtos/${oldProduct._id}`)
+        .then((response) => {
+          setProducts(products.filter((product) => product._id !== oldProduct._id));
+          resolve();
+        })
+        .catch((error) => {
+          alert(`Não foi possível deletar o produto ${oldProduct.name}`);
+          reject();
+        });
+    });
   }
   return (
     <div>
       <MaterialTable
-      localization={{
-        header: {
-          actions: 'Ações'
-        }
-      }}
+        localization={{
+          header: {
+            actions: 'Ações'
+          }
+        }}
         columns={[
           { title: 'Nome', field: 'name' },
-          { title: 'Valor', field: 'value',type: 'numeric' },
+          {
+            title: 'Valor', field: 'value', type: 'currency', currencySetting: { currencyCode: 'BRL' }
+          },
           { title: 'Quantidade', field: 'quantity', type: 'numeric' },
         ]}
-        data={Product}
+        data={products}
         title={category.name}
         editable={{
-          onRowAdd: newData =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                {
-                  const data = Product;
-                  data.push(newData);
-                  addProduct(newData);
-                  setProduct({ data }, () => resolve());
-                }
-                resolve()
-              }, 1000)
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                {
-                  const data = this.state.data;
-                  const index = data.indexOf(oldData);
-                  data[index] = newData;
-                  this.setState({ data }, () => resolve());
-                }
-                resolve()
-              }, 1000)
-            }),
-          onRowDelete: oldData =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                {
-                  let data = this.state.data;
-                  const index = data.indexOf(oldData);
-                  data.splice(index, 1);
-                  this.setState({ data }, () => resolve());
-                }
-                resolve()
-              }, 1000)
-            }),
+          onRowAdd: newProduct => addProduct(newProduct),
+          onRowUpdate: (newProduct, oldProduct) => editProduct(newProduct, oldProduct),
+          onRowDelete: product => deleteProduct(product),
         }}
       />
     </div>

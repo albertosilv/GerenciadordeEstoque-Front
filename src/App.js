@@ -22,7 +22,6 @@ function App() {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
   const [Option, setOption] = useState(null);
-  const [product,setProduct]=useState(null);
 
   useEffect(() => {
     Api.get('categorias/')
@@ -31,22 +30,22 @@ function App() {
 
   useEffect(() => {
 
-  }, [Option])
+  }, [Option]);
+
   function handleSelect(id) {
     if (id === 'settings') {
       setOption('settings');
     }
     else {
-      let categoria = categories.find((category) => category._id === id);
-      setProduct(categoria.products);
       setOption(...categories.filter((category) => category._id === id));
     }
 
   }
   function Select() {
     if (Option === 'settings') return <Settings />;
-  else {
-    return <Products category={Option} product={product} />};
+    else {
+      return <Products category={Option} />
+    };
   }
   return (
     <div className={classes.grid}>
