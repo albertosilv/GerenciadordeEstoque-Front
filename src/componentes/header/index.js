@@ -3,7 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Search from '../search'
-import { withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Exit from '../exit';
 
@@ -11,7 +11,7 @@ import Exit from '../exit';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor:'black',
+    backgroundColor: 'black',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -20,11 +20,11 @@ const styles = theme => ({
     flexGrow: 1,
 
   },
-  
+
 });
 class header extends React.Component {
   render() {
-    const { classes } = this.props;
+    const { classes, auth } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static" style={{ background: '#2E3B55' }}>
@@ -32,8 +32,8 @@ class header extends React.Component {
             <Typography className={classes.title} variant="h5" align="center" position="fixed" noWrap>
               Gerenciador de Estoque
           </Typography>
-            <Search/>
-            <Exit/>
+            <Search />
+            <Exit auth={auth} />
           </Toolbar>
         </AppBar>
       </div>
