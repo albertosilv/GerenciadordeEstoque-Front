@@ -28,7 +28,7 @@ function CategoriesProducts({ category }) {
 
   function addProduct(product) {
     return new Promise((resolve, reject) => {
-      const data = new FormData();
+      const data =  new URLSearchParams();
       data.append('name', product.name);
       data.append('value', product.value);
       data.append('quantity', product.quantity);
@@ -126,7 +126,7 @@ function CategoriesProducts({ category }) {
               <label>{props.value}</label>
             </div>
           ),
-          type: 'date'
+          type: 'data'
         }]}
         data={products}
         title={category.name}

@@ -39,10 +39,21 @@ function App() {
     else {
       setOption(...categories.filter((category) => category._id === id));
     }
+  }
+  function attCategoryAdd(category){
+    setCategories([...categories,category]);
+
+  }
+  function attCategoryMod(newCategoria,oldCategoria){
+    setCategories([...categories.filter((categoria) => categoria._id !== oldCategoria._id), newCategoria]);
+
+  }
+  function attCategoryDel(oldCategoria){
+    setCategories(categories.filter((category) => category._id !== oldCategoria._id));
 
   }
   function Select() {
-    if (Option === 'settings') return <Settings />;
+    if (Option === 'settings') return <Settings attCategoryAdd={attCategoryAdd}  attCategoryDel={attCategoryDel} attCategoryMod={attCategoryMod} />;
     else {
       return <Products category={Option} />
     };
@@ -53,7 +64,7 @@ function App() {
         <Header />
       </Grid>
       <Grid container className={classes.grid}>
-        <Grid item xs={3} className={classes.grid}>
+        <Grid item  className={classes.grid}>
           <Menu handleSelectCategory={handleSelect} categories={categories} />
         </Grid>
         <Grid item xs >

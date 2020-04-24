@@ -2,7 +2,6 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Search from '../search'
 import { withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Exit from '../exit';
@@ -32,7 +31,6 @@ class header extends React.Component {
             <Typography className={classes.title} variant="h5" align="center" position="fixed" noWrap>
               Gerenciador de Estoque
           </Typography>
-            <Search/>
             <Exit/>
           </Toolbar>
         </AppBar>
