@@ -12,7 +12,8 @@ const styles = theme =>({
         '&:focus': {
           outline: 'none',
           color:'none',
-        }
+          },
+        float:'right',
     }
 });
 

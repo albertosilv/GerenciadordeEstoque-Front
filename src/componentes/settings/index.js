@@ -1,21 +1,12 @@
 import MaterialTable from 'material-table'
 import React, { useState, useEffect } from 'react';
 import api from '../server';
-import IconButton from '@material-ui/core/IconButton';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import { makeStyles } from '@material-ui/core/styles';
+import Icon from '@material-ui/core/Icon';
+import { loadCSS } from 'fg-loadcss';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
-const useStyles = makeStyles((theme) => ({
-  input: {
-    display: 'none',
-  },
-  root: {
-    diplay: 'none'
-  }
-}));
 function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
-  const classes = useStyles();
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
@@ -23,6 +14,12 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
         .then((response) => setCategorias(response.data))
     
   }, [category]);
+  React.useEffect(() => {
+    loadCSS(
+      'https://use.fontawesome.com/releases/v5.12.0/css/all.css',
+      document.querySelector('#font-awesome-css'),
+    );
+  }, []);
 
   function addCategoria(categoria) {
     return new Promise((resolve, reject) => {
@@ -97,7 +94,19 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
         }}
         columns={[{ title: 'Nome', field: 'name' }]}
         data={categorias}
-        title={'Categorias'}
+        title={'CATEGORIAS'}
+        options={{
+          pageSize: 10,
+          actionsColumnIndex: -1,
+        }}
+        icons={{
+          Add: () => { 
+          return <Icon className="fa fa-plus-circle"  style={{ fontSize: 30, color:'#075E54' }} />
+          },
+          Delete: () =>{ 
+            return <DeleteIcon  style={{ fontSize: 30, color:'red' }} />
+            },
+        }}
         editable={{
           onRowAdd: newCategoria => addCategoria(newCategoria),
           onRowUpdate: (newCategoria, oldCategoria) => editCategoria(newCategoria, oldCategoria),

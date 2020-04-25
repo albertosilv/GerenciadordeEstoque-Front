@@ -7,20 +7,12 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 const useStyles = makeStyles({
     root: {
         //background: '#242F40',
-        background: '#232232',
 
-        color: '#ffffff',
         height:'100%'
 
     },
     item: {
-        fontSize: '3vh',
-        '&:focus': {
-            color: '#fff',
-        },
-        '&:hover': {
-            color: '#fff',
-        }
+        fontSize: '2vh',
 
     },
 });

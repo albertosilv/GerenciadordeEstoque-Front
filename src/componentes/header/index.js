@@ -28,6 +28,8 @@ class header extends React.Component {
       <div className={classes.root}>
         <AppBar position="static" style={{ background: '#2E3B55' }}>
           <Toolbar>
+          </Toolbar>
+          <Toolbar>
             <Typography className={classes.title} variant="h5" align="center" position="fixed" noWrap>
               Gerenciador de Estoque
           </Typography>

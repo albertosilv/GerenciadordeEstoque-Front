@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 import api from '../server';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, fade } from '@material-ui/core/styles';
+import Icon from '@material-ui/core/Icon';
+import { loadCSS } from 'fg-loadcss';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -12,8 +16,23 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     diplay: 'none'
-  }
-}));
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '30%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    }
+  },
+  }));
+
 function CategoriesProducts({ category }) {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
@@ -25,10 +44,16 @@ function CategoriesProducts({ category }) {
         .then((response) => setProducts(response.data.products))
     }
   }, [category]);
+  React.useEffect(() => {
+    loadCSS(
+      'https://use.fontawesome.com/releases/v5.12.0/css/all.css',
+      document.querySelector('#font-awesome-css'),
+    );
+  }, []);
 
   function addProduct(product) {
     return new Promise((resolve, reject) => {
-      const data =  new URLSearchParams();
+      const data = new URLSearchParams();
       data.append('name', product.name);
       data.append('value', product.value);
       data.append('quantity', product.quantity);
@@ -93,9 +118,15 @@ function CategoriesProducts({ category }) {
             editRow: {
               deleteText: ' Tem certeza que deseja deletar o produto?',
               cancelTooltip: 'Cancelar',
-              saveTooltip: 'Deletar',
-            }
-          }
+              saveTooltip: 'Confirmar',
+            },
+            emptyDataSourceMessage:'Nenhum Produto cadastrado'
+          },
+
+        }}
+        options={{
+          pageSize: 10,
+          actionsColumnIndex: -1,
         }}
         columns={[{ title: 'Nome', field: 'name' },
         {
@@ -128,13 +159,23 @@ function CategoriesProducts({ category }) {
           ),
           type: 'data'
         }]}
+        icons={{
+          Add: () => { 
+          return <Icon className="fa fa-plus-circle"  style={{ fontSize: 30, color:'#075E54' }} />
+          },
+          Delete: () =>{ 
+            return <DeleteIcon  style={{ fontSize: 30, color:'red' }} />
+            },
+        }}
         data={products}
-        title={category.name}
+        title={category.name.toUpperCase()}
         editable={{
           onRowAdd: newProduct => addProduct(newProduct),
           onRowUpdate: (newProduct, oldProduct) => editProduct(newProduct, oldProduct),
           onRowDelete: product => deleteProduct(product),
         }}
+
+
       />
     </div>
   )
