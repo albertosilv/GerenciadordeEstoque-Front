@@ -6,12 +6,15 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles({
     root: {
-        background: '#242F40',
+        //background: '#242F40',
+        background: '#232232',
+
         color: '#ffffff',
+        height:'100%'
 
     },
     item: {
-        fontSize: '20px',
+        fontSize: '3vh',
         '&:focus': {
             color: '#fff',
         },
@@ -21,25 +24,27 @@ const useStyles = makeStyles({
 
     },
 });
-function Menu({categories, handleSelectCategory}) {
-    console.log(typeof(categories));
+function Menu({ categories, handleSelectCategory }) {
+    console.log(typeof (categories));
     console.log(categories);
     const classes = useStyles();
     return (
         <>
-        <div>
-            <MenuList className={classes.root}>
-                {
-                    categories.map((category) => (
-                        <MenuItem className={classes.item}key={category._id} onClick={() => handleSelectCategory(category._id)}>
-                            {category.name}
+            <div className={classes.lateral}>
+                <div className={classes.menu}>
+                    <MenuList className={classes.root}>
+                        {
+                            categories.map((category) => (
+                                <MenuItem className={classes.item} key={category._id} onClick={() => handleSelectCategory(category._id)}>
+                                    {category.name.toUpperCase()}
+                                </MenuItem>
+                            ))}
+                        <MenuItem onClick={() => handleSelectCategory('settings')} className={classes.item}>
+                            CONFIGURAÇÕES
                         </MenuItem>
-                    ))}
-                    <MenuItem onClick={() => handleSelectCategory('settings')} className={classes.item}>
-                    Configurações
-                        </MenuItem>
-            </MenuList>
-        </div >
+                    </MenuList>
+                </div >
+            </div>
         </>
     )
 }

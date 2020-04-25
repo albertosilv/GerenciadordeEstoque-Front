@@ -10,16 +10,14 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: 'none',
   },
-  root:{
-    diplay:'none'
+  root: {
+    diplay: 'none'
   }
 }));
 function CategoriesProducts({ category }) {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
-  //const [Columns, setColumns] = useState([]);
   const [image, setImage] = useState('');
-
 
   useEffect(() => {
     if (category !== null) {
@@ -28,27 +26,22 @@ function CategoriesProducts({ category }) {
     }
   }, [category]);
 
-  if (category === null) {
-    return null;
-  }
-
   function addProduct(product) {
     return new Promise((resolve, reject) => {
-      console.log(image);
-      const data = new FormData();
+      const data =  new URLSearchParams();
       data.append('name', product.name);
       data.append('value', product.value);
       data.append('quantity', product.quantity);
       data.append('image', image);
 
-      api.post(`categorias/${category._id}/produtos`, data)
+      api
+        .post(`categorias/${category._id}/produtos`, data)
         .then((response) => {
           setProducts([...products, product]);
           resolve();
         })
         .catch((error) => {
           alert('Não foi possível adicionar o produto!');
-          console.log(error);
           reject();
         });
     })
@@ -81,6 +74,11 @@ function CategoriesProducts({ category }) {
         });
     });
   }
+
+  if (category === null) {
+    return null;
+  }
+
   return (
     <div>
       <MaterialTable
@@ -93,12 +91,10 @@ function CategoriesProducts({ category }) {
             deleteTooltip: 'Deletar Produto',
             editTooltip: 'Editar Produto',
             editRow: {
-              deleteText:' Tem certeza que deseja deletar o produto?',
-              cancelTooltip:'Cancelar',
-              saveTooltip:'Deletar',
-
+              deleteText: ' Tem certeza que deseja deletar o produto?',
+              cancelTooltip: 'Cancelar',
+              saveTooltip: 'Deletar',
             }
-            
           }
         }}
         columns={[{ title: 'Nome', field: 'name' },
@@ -118,7 +114,8 @@ function CategoriesProducts({ category }) {
             <div>
               <input className={classes.input}
                 id="contained-button-file"
-                type="file" name="image" accept="image/png, image/jpeg, image/jpg"
+                type="file"
+                name="image"
                 onChange={e => setImage(e.target.files[0])}
               />
               <label htmlFor="contained-button-file">
@@ -129,7 +126,7 @@ function CategoriesProducts({ category }) {
               <label>{props.value}</label>
             </div>
           ),
-          type: 'date'
+          type: 'data'
         }]}
         data={products}
         title={category.name}

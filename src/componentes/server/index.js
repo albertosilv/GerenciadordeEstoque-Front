@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: `http://192.168.1.7:4000`
+  baseURL: `https://floating-stream-30009.herokuapp.com`
 });
