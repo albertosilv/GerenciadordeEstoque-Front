@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
       width: 'auto',
     }
   },
-  }));
+}));
 
 function CategoriesProducts({ category }) {
   const classes = useStyles();
@@ -51,17 +51,18 @@ function CategoriesProducts({ category }) {
     );
   }, []);
 
-  function addProduct(product) {
+  function addProduct(newProduct) {
     return new Promise((resolve, reject) => {
       const data = new URLSearchParams();
-      data.append('name', product.name);
-      data.append('value', product.value);
-      data.append('quantity', product.quantity);
+      data.append('name', newProduct.name);
+      data.append('value', newProduct.value);
+      data.append('quantity', newProduct.quantity);
       data.append('image', image);
 
       api
         .post(`categorias/${category._id}/produtos`, data)
         .then((response) => {
+          const product = response.data;
           setProducts([...products, product]);
           resolve();
         })
@@ -120,7 +121,7 @@ function CategoriesProducts({ category }) {
               cancelTooltip: 'Cancelar',
               saveTooltip: 'Confirmar',
             },
-            emptyDataSourceMessage:'Nenhum Produto cadastrado'
+            emptyDataSourceMessage: 'Nenhum Produto cadastrado'
           },
 
         }}
@@ -160,12 +161,12 @@ function CategoriesProducts({ category }) {
           type: 'data'
         }]}
         icons={{
-          Add: () => { 
-          return <Icon className="fa fa-plus-circle"  style={{ fontSize: 30, color:'#075E54' }} />
+          Add: () => {
+            return <Icon className="fa fa-plus-circle" style={{ fontSize: 30, color: '#075E54' }} />
           },
-          Delete: () =>{ 
-            return <DeleteIcon  style={{ fontSize: 30, color:'red' }} />
-            },
+          Delete: () => {
+            return <DeleteIcon style={{ fontSize: 30, color: 'red' }} />
+          },
         }}
         data={products}
         title={category.name.toUpperCase()}
