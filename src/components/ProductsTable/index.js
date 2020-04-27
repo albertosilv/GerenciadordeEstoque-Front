@@ -7,6 +7,12 @@ import { makeStyles, fade } from '@material-ui/core/styles';
 import Icon from '@material-ui/core/Icon';
 import { loadCSS } from 'fg-loadcss';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardMedia from '@material-ui/core/CardMedia';
+
 
 
 
@@ -31,25 +37,40 @@ const useStyles = makeStyles((theme) => ({
       width: 'auto',
     }
   },
+  grid: {
+    margin: theme.spacing(3),
+    marginLeft: theme.spacing(1),
+  },
+  card: {
+    Width: '200px',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  media: {
+    height: '140px',
+  },
 }));
 
 function CategoriesProducts({ category }) {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
   const [image, setImage] = useState('');
-  const tableRef = React.createRef ()
+  const tableRef = React.createRef()
   useEffect(() => {
     if (category !== null) {
       api.get(`categorias/${category._id}`)
         .then((response) => setProducts(response.data.products))
     }
   }, [category]);
-  function getProdutc(){
+  function getProdutc() {
     if (category !== null) {
       api.get(`categorias/${category._id}`)
         .then((response) => {
           setProducts(response.data.products);
-          tableRef.current.onQueryChange({field: "image"});
+          tableRef.current.onQueryChange({ field: "image" });
         })
         .catch((error) => {
           console.log(error);
@@ -84,13 +105,13 @@ function CategoriesProducts({ category }) {
           alert('Não foi possível adicionar o produto!');
           reject();
         });
-        
+
     })
   }
 
   function editProduct(newProduct, oldProduct) {
     return new Promise((resolve, reject) => {
-      
+
       api.put(`produtos/${oldProduct._id}`, newProduct)
         .then((response) => {
           setProducts([...products.filter((product) => product._id !== oldProduct._id), newProduct]);
@@ -142,10 +163,10 @@ function CategoriesProducts({ category }) {
           },
 
         }}
-        columns={[{ 
+        columns={[{
           title: 'Imagem do Produto',
           field: 'image',
-          render: rowData =>  <img src={rowData.image} alt={rowData.name} style={{ width: 50,borderRadius: '50%' }} />,
+          render: rowData => <img src={rowData.image} alt={rowData.name} style={{ width: 50, borderRadius: '50%' }} />,
           editComponent: props => (
             <div>
               <input className={classes.input}
@@ -159,12 +180,12 @@ function CategoriesProducts({ category }) {
                   <PhotoCamera />
                 </IconButton>
               </label>
-              <label>{props.value}</label>
+              <label>{props.name}</label>
             </div>
           ),
-        
+
         },
-        {title: 'Nome', field: 'name' },
+        { title: 'Nome', field: 'name' },
         {
           title: 'Valor', field: 'value', type: 'numeric', currencySetting: { currencyCode: 'BRL' }
         },
@@ -180,7 +201,7 @@ function CategoriesProducts({ category }) {
         }}
         data={products}
         title={category.name.toUpperCase()}
-        tableRef = {tableRef}
+        tableRef={tableRef}
         editable={{
           onRowAdd: newProduct => addProduct(newProduct),
           onRowUpdate: (newProduct, oldProduct) => editProduct(newProduct, oldProduct),
@@ -190,10 +211,34 @@ function CategoriesProducts({ category }) {
           pageSize: 10,
           actionsColumnIndex: -1,
           rowStyle: rowData => ({
-              backgroundColor: (rowData.quantity>=10)? '#fff' :(rowData.quantity>0)?'#e5cf27': '#e02327',
-            })
-          }}
-
+            backgroundColor: (rowData.quantity >= 10) ? '#fff' : (rowData.quantity > 0) ? '#e5cf27' : '#e02327',
+          })
+        }}
+        detailPanel={[
+          {
+            tooltip: 'Detalhe',
+            render: rowData => {
+              return (
+                <Card align='center' className={classes.card}>
+                 
+                    <CardContent>
+                      <img src={rowData.image} alt={rowData.name} style={{ width: 300, height: 300 }} />
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {rowData.name}
+                      </Typography>
+                      <Typography variant="body2"  component="p">
+                        Valor:  R$ {rowData.value}
+                      </Typography>
+                      <Typography variant="body2"  component="p">
+                        Quantidade: {rowData.quantity}
+                      </Typography>
+                    </CardContent>
+                  
+                </Card>
+              )
+            },
+          },
+        ]}
 
       />
     </div>

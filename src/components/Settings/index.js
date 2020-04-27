@@ -6,6 +6,7 @@ import { loadCSS } from 'fg-loadcss';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 
+
 function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
   const [categories, setCategories] = useState([]);
 
