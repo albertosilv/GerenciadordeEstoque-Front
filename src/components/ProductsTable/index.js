@@ -10,8 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
+
 
 
 
@@ -87,12 +86,12 @@ function CategoriesProducts({ category }) {
   function addProduct(newProduct) {
     return new Promise((resolve, reject) => {
       const data = new FormData();
-      if (typeof newProduct.name === 'undefined') data.append('name', "Indefinido");
-      else data.append('name', newProduct.name);
-      if (typeof newProduct.value === 'undefined') data.append('value', 0);
-      else data.append('value', newProduct.value);
-      if (typeof newProduct.quantity === 'undefined') data.append('quantity', 0);
-      else data.append('quantity', newProduct.quantity);
+
+      const { name = 'Indefinido', value = 0, quantity = 0 } = newProduct;
+
+      data.append('name', name);
+      data.append('value', value);
+      data.append('quantity', quantity);
       data.append('image', image);
 
       api
@@ -111,11 +110,19 @@ function CategoriesProducts({ category }) {
 
   function editProduct(newProduct, oldProduct) {
     return new Promise((resolve, reject) => {
+      const data = new FormData();
+      data.append('name', newProduct.name);
+      data.append('value', newProduct.value);
+      data.append('quantity', newProduct.quantity);
+      if (newProduct.image) {
+        data.append('image', newProduct.image);
+      }
+      console.log(newProduct);
 
       api.put(`produtos/${oldProduct._id}`, newProduct)
         .then((response) => {
-          setProducts([...products.filter((product) => product._id !== oldProduct._id), newProduct]);
-          getProdutc()
+          const product = response.data;
+          setProducts([...products.filter((product) => product._id !== oldProduct._id), product]);
           resolve();
         })
         .catch((error) => {
@@ -159,8 +166,20 @@ function CategoriesProducts({ category }) {
               cancelTooltip: 'Cancelar',
               saveTooltip: 'Confirmar',
             },
-            emptyDataSourceMessage: 'Nenhum Produto cadastrado'
+            emptyDataSourceMessage: 'Nenhum Produto cadastrado',
           },
+          pagination: {
+            labelDisplayedRows: "{from}-{to} de {count}",
+            firstAriaLabel: 'Primeira página',
+            firstTooltip: 'Primeira página',
+            labelRowsSelect: 'Linhas',
+            previousAriaLabel: 'Página anterior',
+            previousTooltip: 'Página anterior',
+            nextTooltip: 'Próxima página',
+            nextAriaLabel: 'Próxima página',
+            lastAriaLabel: 'Última página',
+            lastTooltip: 'Última página',
+          }
 
         }}
         columns={[{
