@@ -71,7 +71,6 @@ function CategoriesProducts({ category }) {
       api.get(`categorias/${category._id}`)
         .then((response) => {
           setProducts(response.data.products);
-          tableRef.current.onQueryChange({ field: "image" });
         })
         .catch((error) => {
           console.log(error);

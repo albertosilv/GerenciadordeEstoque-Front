@@ -106,20 +106,13 @@ function Dashboard({ auth }) {
       setOption(...categories.filter((category) => category._id === id));
     }
   }
-  function attCategoryAdd(category) {
-    setCategories([...categories, category]);
-
-  }
-  function attCategoryMod(newCategoria, oldCategoria) {
-    setCategories([...categories.filter((categoria) => categoria._id !== oldCategoria._id), newCategoria]);
-
-  }
-  function attCategoryDel(oldCategoria) {
-    setCategories(categories.filter((category) => category._id !== oldCategoria._id));
+  function attCategory(category) {
+    Api.get('categorias/')
+      .then((response) => setCategories(response.data));
 
   }
   function Select() {
-    if (Option === 'settings') return <Settings attCategoryAdd={attCategoryAdd} attCategoryDel={attCategoryDel} attCategoryMod={attCategoryMod} />;
+    if (Option === 'settings') return <Settings attCategory={attCategory}  />;
     else {
       return <Products category={Option} />
     };
