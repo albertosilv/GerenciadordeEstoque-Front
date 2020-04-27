@@ -1,6 +1,6 @@
 import MaterialTable from 'material-table'
 import React, { useState, useEffect } from 'react';
-import api from '../server';
+import api from '../../services/api';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { makeStyles, fade } from '@material-ui/core/styles';
@@ -53,7 +53,7 @@ function CategoriesProducts({ category }) {
 
   function addProduct(newProduct) {
     return new Promise((resolve, reject) => {
-      const data = new URLSearchParams();
+      const data = new FormData();
       data.append('name', newProduct.name);
       data.append('value', newProduct.value);
       data.append('quantity', newProduct.quantity);

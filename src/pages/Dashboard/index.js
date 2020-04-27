@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Menu from '../../componentes/menu';
-import Api from '../../componentes/server/index';
-import Products from '../../componentes/Products';
-import Settings from '../../componentes/settings'
+import Menu from '../../components/Menu';
+import Api from '../../services/api';
+import Products from '../../components/ProductsTable';
+import Settings from '../../components/Settings'
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Exit from '../../componentes/exit';
+import Exit from '../../components/ExitIcon';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,8 +13,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-
-
 
 
 const drawerWidth = 300;
@@ -88,9 +86,6 @@ function Dashboard({ auth }) {
       .then((response) => setCategories(response.data))
   }, []);
 
-  useEffect(() => {
-
-  }, [Option]);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 

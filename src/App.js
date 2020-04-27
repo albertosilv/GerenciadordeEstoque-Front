@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, useHistory, Switch, Redirect } from 'react-router-dom';
 import Login from "./pages/login";
 import Dashboard from "./pages/Dashboard";
-import Auth from "./Auth/Auth";
+import Auth from "./auth/Auth";
 
 function App() {
   const history = useHistory();
@@ -22,8 +22,6 @@ function App() {
     </Switch>
   )
 }
-
-//1587760940710
 
 export default App;
 

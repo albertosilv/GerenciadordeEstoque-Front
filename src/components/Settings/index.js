@@ -1,18 +1,18 @@
 import MaterialTable from 'material-table'
 import React, { useState, useEffect } from 'react';
-import api from '../server';
+import api from '../../services/api';
 import Icon from '@material-ui/core/Icon';
 import { loadCSS } from 'fg-loadcss';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 
 function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
-  const [categorias, setCategorias] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
       api.get(`categorias/`)
-        .then((response) => setCategorias(response.data))
-    
+        .then((response) => setCategories(response.data))
+
   }, [category]);
   React.useEffect(() => {
     loadCSS(
@@ -21,14 +21,14 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
     );
   }, []);
 
-  function addCategoria(categoria) {
+  function addCategory(category) {
     return new Promise((resolve, reject) => {
       const data = new URLSearchParams();
-      data.append('name', categoria.name);
+      data.append('name', category.name);
       api.post(`categorias/`,data)
         .then((response) => {
-          setCategorias([...categorias, categoria]);
-          attCategoryAdd(categoria);
+          setCategories([...categories, category]);
+          attCategoryAdd(category);
           resolve();
         })
         .catch((error) => {
@@ -39,13 +39,13 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
     })
   }
 
-  function editCategoria(newCategoria, oldCategoria) {
+  function editCategory(newCategory, oldCategory) {
     return new Promise((resolve, reject) => {
-      const newCate= new URLSearchParams(newCategoria);
-      api.put(`categorias/${oldCategoria._id}`, newCate)
+      const newCate= new URLSearchParams(newCategory);
+      api.put(`categorias/${oldCategory._id}`, newCate)
         .then((response) => {
-          setCategorias([...categorias.filter((categoria) => categoria._id !== oldCategoria._id), newCategoria]);
-          attCategoryMod(newCategoria,oldCategoria);
+          setCategories([...categories.filter((categoria) => categoria._id !== oldCategory._id), newCategory]);
+          attCategoryMod(newCategory,oldCategory);
           resolve();
         })
         .catch((error) => {
@@ -55,16 +55,16 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
     });
   }
 
-  function deleteProduct(oldCategoria) {
+  function deleteCategory(oldCategory) {
     return new Promise((resolve, reject) => {
-      api.delete(`/categorias/${oldCategoria._id}`)
+      api.delete(`/categorias/${oldCategory._id}`)
         .then((response) => {
-          setCategorias(categorias.filter((category) => category._id !== oldCategoria._id));
-          attCategoryDel(oldCategoria);
+          setCategories(categories.filter((category) => category._id !== oldCategory._id));
+          attCategoryDel(oldCategory);
           resolve();
         })
         .catch((error) => {
-          alert(`Não foi possível deletar a categoria${oldCategoria.name}`);
+          alert(`Não foi possível deletar a categoria${oldCategory.name}`);
           reject();
         });
     });
@@ -93,24 +93,24 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
           }
         }}
         columns={[{ title: 'Nome', field: 'name' }]}
-        data={categorias}
+        data={categories}
         title={'CATEGORIAS'}
         options={{
           pageSize: 10,
           actionsColumnIndex: -1,
         }}
         icons={{
-          Add: () => { 
+          Add: () => {
           return <Icon className="fa fa-plus-circle"  style={{ fontSize: 30, color:'#075E54' }} />
           },
-          Delete: () =>{ 
+          Delete: () =>{
             return <DeleteIcon  style={{ fontSize: 30, color:'red' }} />
             },
         }}
         editable={{
-          onRowAdd: newCategoria => addCategoria(newCategoria),
-          onRowUpdate: (newCategoria, oldCategoria) => editCategoria(newCategoria, oldCategoria),
-          onRowDelete: categoria => deleteProduct(categoria),
+          onRowAdd: newCategoria => addCategory(newCategoria),
+          onRowUpdate: (newCategoria, oldCategoria) => editCategory(newCategoria, oldCategoria),
+          onRowDelete: categoria => deleteCategory(categoria),
         }}
       />
     </div>
