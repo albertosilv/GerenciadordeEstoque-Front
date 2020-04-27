@@ -53,12 +53,12 @@ function CategoriesProducts({ category }) {
   function addProduct(newProduct) {
     return new Promise((resolve, reject) => {
       const data = new FormData();
-      if (typeof newProduct.name === 'undefined') data.append('name', "Indefinido");
-      else data.append('name', newProduct.name);
-      if (typeof newProduct.value === 'undefined') data.append('value', 0);
-      else data.append('value', newProduct.value);
-      if (typeof newProduct.quantity === 'undefined') data.append('quantity', 0);
-      else data.append('quantity', newProduct.quantity);
+
+      const { name = 'Indefinido', value = 0, quantity = 0 } = newProduct;
+
+      data.append('name', name);
+      data.append('value', value);
+      data.append('quantity', quantity);
       data.append('image', image);
 
       api
@@ -72,16 +72,25 @@ function CategoriesProducts({ category }) {
           alert('Não foi possível adicionar o produto!');
           reject();
         });
-        
+
     })
   }
 
   function editProduct(newProduct, oldProduct) {
     return new Promise((resolve, reject) => {
-      
+      const data = new FormData();
+      data.append('name', newProduct.name);
+      data.append('value', newProduct.value);
+      data.append('quantity', newProduct.quantity);
+      if (newProduct.image) {
+        data.append('image', newProduct.image);
+      }
+      console.log(newProduct);
+
       api.put(`produtos/${oldProduct._id}`, newProduct)
         .then((response) => {
-          setProducts([...products.filter((product) => product._id !== oldProduct._id), newProduct]);
+          const product = response.data;
+          setProducts([...products.filter((product) => product._id !== oldProduct._id), product]);
           resolve();
         })
         .catch((error) => {
@@ -124,16 +133,28 @@ function CategoriesProducts({ category }) {
               cancelTooltip: 'Cancelar',
               saveTooltip: 'Confirmar',
             },
-            emptyDataSourceMessage: 'Nenhum Produto cadastrado'
+            emptyDataSourceMessage: 'Nenhum Produto cadastrado',
           },
+          pagination: {
+            labelDisplayedRows: "{from}-{to} de {count}",
+            firstAriaLabel: 'Primeira página',
+            firstTooltip: 'Primeira página',
+            labelRowsSelect: 'Linhas',
+            previousAriaLabel: 'Página anterior',
+            previousTooltip: 'Página anterior',
+            nextTooltip: 'Próxima página',
+            nextAriaLabel: 'Próxima página',
+            lastAriaLabel: 'Última página',
+            lastTooltip: 'Última página',
+          }
 
         }}
-        columns={[{ 
+        columns={[{
           title: 'Imagem do Produto',
           field: 'image',
           render: rowData => {
             if (rowData.image) {
-              return <img src={rowData.image} alt={rowData.name} style={{ width: 50,borderRadius: '50%' }} />
+              return <img src={rowData.image} alt={rowData.name} style={{ width: 50, borderRadius: '50%' }} />
             }
           },
           editComponent: props => (
@@ -152,9 +173,9 @@ function CategoriesProducts({ category }) {
               <label>{props.value}</label>
             </div>
           ),
-        
+
         },
-        {title: 'Nome', field: 'name' },
+        { title: 'Nome', field: 'name' },
         {
           title: 'Valor', field: 'value', type: 'numeric', currencySetting: { currencyCode: 'BRL' }
         },
@@ -179,9 +200,9 @@ function CategoriesProducts({ category }) {
           pageSize: 10,
           actionsColumnIndex: -1,
           rowStyle: rowData => ({
-              backgroundColor: (rowData.quantity>=10)? '#fff' :(rowData.quantity>0)?'#ff0': '#f00',
-            })
-          }}
+            backgroundColor: (rowData.quantity >= 10) ? '#fff' : (rowData.quantity > 0) ? '#e5cf27' : '#e02327',
+          })
+        }}
 
 
       />
