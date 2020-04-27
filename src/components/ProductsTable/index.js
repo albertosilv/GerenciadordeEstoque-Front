@@ -58,6 +58,8 @@ function CategoriesProducts({ category }) {
   const [products, setProducts] = useState([]);
   const [image, setImage] = useState('');
   const tableRef = React.createRef()
+
+  const noImageUrl = 'https://res.cloudinary.com/dxfhgup9v/image/upload/v1587944673/sh5od01cgrijw4u61xmz.jpg';
   useEffect(() => {
     if (category !== null) {
       api.get(`categorias/${category._id}`)
@@ -185,7 +187,9 @@ function CategoriesProducts({ category }) {
         columns={[{
           title: 'Imagem do Produto',
           field: 'image',
-          render: rowData => <img src={rowData.image} alt={rowData.name} style={{ width: 50, borderRadius: '50%' }} />,
+          render: rowData =>
+            <img src={rowData.image || noImageUrl} alt={rowData.name} style={{ width: 50, borderRadius: '50%' }} />
+          ,
           editComponent: props => (
             <div>
               <input className={classes.input}
@@ -238,21 +242,22 @@ function CategoriesProducts({ category }) {
             tooltip: 'Detalhe',
             render: rowData => {
               return (
-                <Card align='center' className={classes.card}>
-                 
-                    <CardContent>
-                      <img src={rowData.image} alt={rowData.name} style={{ width: 300, height: 300 }} />
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {rowData.name}
-                      </Typography>
-                      <Typography variant="body2"  component="p">
-                        Valor:  R$ {rowData.value}
-                      </Typography>
-                      <Typography variant="body2"  component="p">
-                        Quantidade: {rowData.quantity}
-                      </Typography>
-                    </CardContent>
-                  
+                <Card align='center' className={classes.card} style={{ backgroundColor: '#6a8eb5' }}>
+
+                  <CardContent>
+
+                    <img src={rowData.image || noImageUrl} alt={rowData.name} style={{ width: 300, height: 300 }} />
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {rowData.name}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      Valor:  R$ {rowData.value}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      Quantidade: {rowData.quantity}
+                    </Typography>
+                  </CardContent>
+
                 </Card>
               )
             },
