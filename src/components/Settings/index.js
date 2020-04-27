@@ -7,7 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 
 
-function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
+function Settings({ category, attCategory }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
       api.post(`categorias/`,data)
         .then((response) => {
           setCategories([...categories, category]);
-          attCategoryAdd(category);
+          attCategory();
           resolve();
         })
         .catch((error) => {
@@ -46,7 +46,7 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
       api.put(`categorias/${oldCategory._id}`, newCate)
         .then((response) => {
           setCategories([...categories.filter((categoria) => categoria._id !== oldCategory._id), newCategory]);
-          attCategoryMod(newCategory,oldCategory);
+          attCategory();
           resolve();
         })
         .catch((error) => {
@@ -61,7 +61,7 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
       api.delete(`/categorias/${oldCategory._id}`)
         .then((response) => {
           setCategories(categories.filter((category) => category._id !== oldCategory._id));
-          attCategoryDel(oldCategory);
+          attCategory();
           resolve();
         })
         .catch((error) => {
@@ -83,13 +83,13 @@ function Settings({ category, attCategoryAdd,attCategoryDel,attCategoryMod }) {
             actions: 'Ações'
           },
           body: {
-            addTooltip: 'Adicionar Produto',
-            deleteTooltip: 'Deletar Produto',
-            editTooltip: 'Editar Produto',
+            addTooltip: 'Adicionar Categoria',
+            deleteTooltip: 'Deletar Categoria',
+            editTooltip: 'Editar Categoria',
             editRow: {
-              deleteText: ' Tem certeza que deseja deletar o produto?',
+              deleteText: ' Tem certeza que deseja deletar a categoria?',
               cancelTooltip: 'Cancelar',
-              saveTooltip: 'Deletar',
+              saveTooltip: 'Confirmar',
             }
           }
         }}
