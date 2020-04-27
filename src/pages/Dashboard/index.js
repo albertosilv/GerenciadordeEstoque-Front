@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
 
+
 const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
@@ -73,7 +74,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   exit: {
-    float: 'right',
+    float: 'right',     
+    padding: theme.spacing(0, 10)
+
   }
 }));
 
@@ -87,7 +90,7 @@ function Dashboard({ auth }) {
   }, []);
 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const toggleDrawer = (bol) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -125,8 +128,7 @@ function Dashboard({ auth }) {
     <div className={classes.grid}>
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
+        <AppBar position={'absolute'}
           className={clsx(classes.appBar, {
             [classes.appBarShift]: open,
           })}
@@ -141,10 +143,10 @@ function Dashboard({ auth }) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
+            <Typography style={{ flex: 1 }} variant="h6" noWrap>
               Gerenciador de Estoque
           </Typography>
-            <Exit className={classes.exit} auth={auth} />
+            <Exit auth={auth} />
           </Toolbar>
         </AppBar>
         <Drawer
