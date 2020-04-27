@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Dashboard() {
+function Dashboard({ auth }) {
   const [categories, setCategories] = useState([]);
   const [Option, setOption] = useState(null);
 
@@ -149,7 +149,7 @@ function Dashboard() {
             <Typography variant="h6" noWrap>
               Gerenciador de Estoque
           </Typography>
-            <Exit className={classes.exit} />
+            <Exit className={classes.exit} auth={auth} />
           </Toolbar>
         </AppBar>
         <Drawer
