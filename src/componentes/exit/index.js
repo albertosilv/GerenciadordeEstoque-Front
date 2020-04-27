@@ -1,11 +1,10 @@
 import React from 'react';
-import Exit from '@material-ui/icons/ExitToApp';
+import ExitTo from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
-import { withStyles} from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { GoogleLogout } from "react-google-login";
+import { makeStyles} from '@material-ui/core/styles';
 
-
-const styles = theme =>({
+const useStyles = makeStyles((theme) => ({
     exit:{
         padding: theme.spacing(0, 3),
         color:'white',
@@ -15,19 +14,22 @@ const styles = theme =>({
           },
         float:'right',
     }
-});
+  }));
 
-class exit extends React.Component{
-    render(){
-        const {classes}= this.props;
-        return (
-            <IconButton className={classes.exit} aria-label="exit">
-              <Exit />
-            </IconButton>
-        )
-    }
+const Exit = ({ auth }) => {
+    const classes=useStyles();
+    return (
+        <IconButton className={classes.exit} aria-label="exit">
+              <ExitTo />
+              <GoogleLogout
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            buttonText="Sair"
+            onLogoutSuccess={auth.logout}
+            theme="dark"
+        />
+        </IconButton>
+       
+    )
 };
-exit.propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
-  export default withStyles(styles)(exit);
+
+export default Exit;
