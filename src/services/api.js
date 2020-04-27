@@ -1,5 +1,7 @@
 import axios from 'axios';
 
-export default axios.create({
+const api =  axios.create({
   baseURL: `https://floating-stream-30009.herokuapp.com`
 });
+
+export default api;

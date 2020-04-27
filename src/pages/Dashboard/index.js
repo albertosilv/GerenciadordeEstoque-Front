@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Menu from '../../componentes/menu';
-import Api from '../../componentes/server/index';
-import Products from '../../componentes/Products';
-import Settings from '../../componentes/settings'
+import Menu from '../../components/Menu';
+import Api from '../../services/api';
+import Products from '../../components/ProductsTable';
+import Settings from '../../components/Settings'
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Exit from '../../componentes/exit';
+import Exit from '../../components/ExitIcon';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,7 +13,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-
 
 
 
@@ -75,7 +74,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   exit: {
-    float: 'right',
+    float: 'right',     
+    padding: theme.spacing(0, 10)
+
   }
 }));
 
@@ -88,11 +89,8 @@ function Dashboard({ auth }) {
       .then((response) => setCategories(response.data))
   }, []);
 
-  useEffect(() => {
-
-  }, [Option]);
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const toggleDrawer = (bol) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -108,20 +106,13 @@ function Dashboard({ auth }) {
       setOption(...categories.filter((category) => category._id === id));
     }
   }
-  function attCategoryAdd(category) {
-    setCategories([...categories, category]);
-
-  }
-  function attCategoryMod(newCategoria, oldCategoria) {
-    setCategories([...categories.filter((categoria) => categoria._id !== oldCategoria._id), newCategoria]);
-
-  }
-  function attCategoryDel(oldCategoria) {
-    setCategories(categories.filter((category) => category._id !== oldCategoria._id));
+  function attCategory(category) {
+    Api.get('categorias/')
+      .then((response) => setCategories(response.data));
 
   }
   function Select() {
-    if (Option === 'settings') return <Settings attCategoryAdd={attCategoryAdd} attCategoryDel={attCategoryDel} attCategoryMod={attCategoryMod} />;
+    if (Option === 'settings') return <Settings attCategory={attCategory}  />;
     else {
       return <Products category={Option} />
     };
@@ -130,8 +121,7 @@ function Dashboard({ auth }) {
     <div className={classes.grid}>
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
+        <AppBar position={'absolute'}
           className={clsx(classes.appBar, {
             [classes.appBarShift]: open,
           })}
@@ -146,10 +136,10 @@ function Dashboard({ auth }) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
+            <Typography style={{ flex: 1 }} variant="h6" noWrap>
               Gerenciador de Estoque
           </Typography>
-            <Exit className={classes.exit} auth={auth} />
+            <Exit auth={auth} />
           </Toolbar>
         </AppBar>
         <Drawer

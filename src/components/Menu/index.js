@@ -6,24 +6,18 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles({
     root: {
-        //background: '#242F40',
-
         height:'100%'
-
     },
     item: {
         fontSize: '2vh',
-
     },
 });
 function Menu({ categories, handleSelectCategory }) {
-    console.log(typeof (categories));
-    console.log(categories);
     const classes = useStyles();
     return (
         <>
-            <div className={classes.lateral}>
-                <div className={classes.menu}>
+            <div>
+                <div>
                     <MenuList className={classes.root}>
                         {
                             categories.map((category) => (
