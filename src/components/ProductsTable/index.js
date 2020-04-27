@@ -50,13 +50,15 @@ function CategoriesProducts({ category }) {
       document.querySelector('#font-awesome-css'),
     );
   }, []);
-
   function addProduct(newProduct) {
     return new Promise((resolve, reject) => {
       const data = new FormData();
-      data.append('name', newProduct.name);
-      data.append('value', newProduct.value);
-      data.append('quantity', newProduct.quantity);
+      if (typeof newProduct.name === 'undefined') data.append('name', "Indefinido");
+      else data.append('name', newProduct.name);
+      if (typeof newProduct.value === 'undefined') data.append('value', 0);
+      else data.append('value', newProduct.value);
+      if (typeof newProduct.quantity === 'undefined') data.append('quantity', 0);
+      else data.append('quantity', newProduct.quantity);
       data.append('image', image);
 
       api
@@ -70,11 +72,13 @@ function CategoriesProducts({ category }) {
           alert('Não foi possível adicionar o produto!');
           reject();
         });
+        
     })
   }
 
   function editProduct(newProduct, oldProduct) {
     return new Promise((resolve, reject) => {
+      
       api.put(`produtos/${oldProduct._id}`, newProduct)
         .then((response) => {
           setProducts([...products.filter((product) => product._id !== oldProduct._id), newProduct]);
@@ -104,7 +108,6 @@ function CategoriesProducts({ category }) {
   if (category === null) {
     return null;
   }
-
   return (
     <div>
       <MaterialTable
@@ -125,21 +128,12 @@ function CategoriesProducts({ category }) {
           },
 
         }}
-        options={{
-          pageSize: 10,
-          actionsColumnIndex: -1,
-        }}
-        columns={[{ title: 'Nome', field: 'name' },
-        {
-          title: 'Valor', field: 'value', type: 'currency', currencySetting: { currencyCode: 'BRL' }
-        },
-        { title: 'Quantidade', field: 'quantity', type: 'numeric', defaultSort: 'desc', },
-        {
+        columns={[{ 
           title: 'Imagem do Produto',
           field: 'image',
           render: rowData => {
             if (rowData.image) {
-              return <img src={rowData.image} alt={rowData.name} style={{ width: 80 }} />
+              return <img src={rowData.image} alt={rowData.name} style={{ width: 50,borderRadius: '50%' }} />
             }
           },
           editComponent: props => (
@@ -158,14 +152,20 @@ function CategoriesProducts({ category }) {
               <label>{props.value}</label>
             </div>
           ),
-          type: 'data'
-        }]}
+        
+        },
+        {title: 'Nome', field: 'name' },
+        {
+          title: 'Valor', field: 'value', type: 'numeric', currencySetting: { currencyCode: 'BRL' }
+        },
+        { title: 'Quantidade', field: 'quantity', type: 'numeric', defaultSort: 'desc', },
+        ]}
         icons={{
           Add: () => {
             return <Icon className="fa fa-plus-circle" style={{ fontSize: 30, color: '#075E54' }} />
           },
           Delete: () => {
-            return <DeleteIcon style={{ fontSize: 30, color: 'red' }} />
+            return <DeleteIcon style={{ fontSize: 30, color: '#8b0000' }} />
           },
         }}
         data={products}
@@ -175,6 +175,13 @@ function CategoriesProducts({ category }) {
           onRowUpdate: (newProduct, oldProduct) => editProduct(newProduct, oldProduct),
           onRowDelete: product => deleteProduct(product),
         }}
+        options={{
+          pageSize: 10,
+          actionsColumnIndex: -1,
+          rowStyle: rowData => ({
+              backgroundColor: (rowData.quantity>=10)? '#fff' :(rowData.quantity>0)?'#ff0': '#f00',
+            })
+          }}
 
 
       />

@@ -12,6 +12,7 @@ function Login({ auth }) {
   };
 
   return (
+    <div>
     <GoogleLogin
       buttonText="Fazer login com Google"
       clientId="86796554590-gt3o70mtm8qq35lebu0enu6k7nvc2arg.apps.googleusercontent.com"
@@ -19,6 +20,7 @@ function Login({ auth }) {
       onFailure={(error) => alert(`Não foi possível fazer o login usando o Google! ${error}`)}
       theme="dark"
     />
+    </div>
   )
 }
 
