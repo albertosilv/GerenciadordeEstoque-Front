@@ -37,13 +37,26 @@ function CategoriesProducts({ category }) {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
   const [image, setImage] = useState('');
-
+  const tableRef = React.createRef ()
   useEffect(() => {
     if (category !== null) {
       api.get(`categorias/${category._id}`)
         .then((response) => setProducts(response.data.products))
     }
   }, [category]);
+  function getProdutc(){
+    if (category !== null) {
+      api.get(`categorias/${category._id}`)
+        .then((response) => {
+          setProducts(response.data.products);
+          tableRef.current.onQueryChange({field: "image"});
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+  }
   React.useEffect(() => {
     loadCSS(
       'https://use.fontawesome.com/releases/v5.12.0/css/all.css',
@@ -64,8 +77,7 @@ function CategoriesProducts({ category }) {
       api
         .post(`categorias/${category._id}/produtos`, data)
         .then((response) => {
-          const product = response.data;
-          setProducts([...products, product]);
+          getProdutc();
           resolve();
         })
         .catch((error) => {
@@ -82,6 +94,7 @@ function CategoriesProducts({ category }) {
       api.put(`produtos/${oldProduct._id}`, newProduct)
         .then((response) => {
           setProducts([...products.filter((product) => product._id !== oldProduct._id), newProduct]);
+          getProdutc()
           resolve();
         })
         .catch((error) => {
@@ -96,6 +109,7 @@ function CategoriesProducts({ category }) {
       api.delete(`/produtos/${oldProduct._id}`)
         .then((response) => {
           setProducts(products.filter((product) => product._id !== oldProduct._id));
+          getProdutc()
           resolve();
         })
         .catch((error) => {
@@ -131,11 +145,7 @@ function CategoriesProducts({ category }) {
         columns={[{ 
           title: 'Imagem do Produto',
           field: 'image',
-          render: rowData => {
-            if (rowData.image) {
-              return <img src={rowData.image} alt={rowData.name} style={{ width: 50,borderRadius: '50%' }} />
-            }
-          },
+          render: rowData =>  <img src={rowData.image} alt={rowData.name} style={{ width: 50,borderRadius: '50%' }} />,
           editComponent: props => (
             <div>
               <input className={classes.input}
@@ -170,6 +180,7 @@ function CategoriesProducts({ category }) {
         }}
         data={products}
         title={category.name.toUpperCase()}
+        tableRef = {tableRef}
         editable={{
           onRowAdd: newProduct => addProduct(newProduct),
           onRowUpdate: (newProduct, oldProduct) => editProduct(newProduct, oldProduct),
@@ -179,7 +190,7 @@ function CategoriesProducts({ category }) {
           pageSize: 10,
           actionsColumnIndex: -1,
           rowStyle: rowData => ({
-              backgroundColor: (rowData.quantity>=10)? '#fff' :(rowData.quantity>0)?'#ff0': '#f00',
+              backgroundColor: (rowData.quantity>=10)? '#fff' :(rowData.quantity>0)?'#e5cf27': '#e02327',
             })
           }}
 
