@@ -102,7 +102,7 @@ function CategoriesProducts({ category }) {
           resolve();
         })
         .catch((error) => {
-          alert('Não foi possível adicionar o produto!');
+          console.log('Não foi possível adicionar o produto!');
           reject();
         });
 
@@ -127,7 +127,7 @@ function CategoriesProducts({ category }) {
           resolve();
         })
         .catch((error) => {
-          alert('Erro ao editar produto!')
+          console.log('Erro ao editar produto!')
           reject();
         });
     });
@@ -142,7 +142,7 @@ function CategoriesProducts({ category }) {
           resolve();
         })
         .catch((error) => {
-          alert(`Não foi possível deletar o produto ${oldProduct.name}`);
+          console.log(`Não foi possível deletar o produto ${oldProduct.name}`);
           reject();
         });
     });

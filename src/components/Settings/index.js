@@ -33,7 +33,7 @@ function Settings({ category, attCategory }) {
           resolve();
         })
         .catch((error) => {
-          alert('Não foi possível adicionar o produto!');
+          console.log('Não foi possível adicionar o produto!');
           console.log(error);
           reject();
         });
@@ -50,7 +50,7 @@ function Settings({ category, attCategory }) {
           resolve();
         })
         .catch((error) => {
-          alert('Erro ao editar a categoria!')
+          console.log('Erro ao editar a categoria!');
           reject();
         });
     });
@@ -65,7 +65,7 @@ function Settings({ category, attCategory }) {
           resolve();
         })
         .catch((error) => {
-          alert(`Não foi possível deletar a categoria${oldCategory.name}`);
+          console.log(`Não foi possível deletar a categoria${oldCategory.name}`);
           reject();
         });
     });
