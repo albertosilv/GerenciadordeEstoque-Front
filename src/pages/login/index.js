@@ -11,10 +11,10 @@ const useStyles = makeStyles((theme) => ({
       outline: 'none',
       color: 'none',
     },
-  
+
   },
-  icon:{
-    fontSize:'100px'
+  icon: {
+    fontSize: '100px'
   }
 }));
 
@@ -37,20 +37,20 @@ function Login({ auth }) {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: '100vh'}}
+        style={{ minHeight: '100vh' }}
       >
 
-        <Grid item spacing={10} className={classes.grid}  xs={12}>
-        <AccountCircleIcon fontSize="large" className={classes.icon} color={'primary'} />
-          
+        <Grid item spacing={10} className={classes.grid} xs={12}>
+          <AccountCircleIcon fontSize="large" className={classes.icon} color={'primary'} />
+
         </Grid>
         <Grid item spacing={10} className={classes.grid} xs={12}>
-        <GoogleLogin
+          <GoogleLogin
             buttonText=" Logar "
             className={classes.login}
-            clientId="86796554590-gt3o70mtm8qq35lebu0enu6k7nvc2arg.apps.googleusercontent.com"
+            clientId="1043532048097-gp36ja8qk1ltvq402rs4so1lu0lc1dp6.apps.googleusercontent.com"
             onSuccess={responseGoogle}
-            onFailure={(error) => console.log(`Não foi possível fazer o login usando o Google! ${error}`)}
+            onFailure={(error) => console.log(`Não foi possível fazer o login usando o Google! ${JSON.stringify(error)}`)}
             theme="dark"
           />
         </Grid>

@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme) => ({
         },
 
     },
-    div:{
-        float:'right'
+    div: {
+        float: 'right'
     }
 }));
 
@@ -28,7 +28,7 @@ const Exit = ({ auth }) => {
 
         <div className={classes.div}>
             <GoogleLogout className={classes.exit}
-                clientId="86796554590-gt3o70mtm8qq35lebu0enu6k7nvc2arg.apps.googleusercontent.com"
+                clientId="1043532048097-gp36ja8qk1ltvq402rs4so1lu0lc1dp6.apps.googleusercontent.com"
                 buttonText="Sair"
                 onLogoutSuccess={() => auth.logout()}
                 theme="dark"
